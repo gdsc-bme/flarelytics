@@ -5,3 +5,4 @@ transpiled
 .DS_Store
 *-lock.*
 *.lock
+.dev.vars

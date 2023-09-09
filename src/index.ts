@@ -1,5 +1,8 @@
 import { handleRequest } from './handler'
+import Env from './env'
 
-addEventListener('fetch', (event: FetchEvent) => {
-  event.respondWith(handleRequest(event.request))
-});
+export default {
+	async fetch(request: Request, env: Env) {
+		return handleRequest(request, env);
+	},
+};

@@ -1,8 +1,9 @@
-import Storage, { Event } from "./storage";
+import Storage, { Event } from './storage';
+import Env from './env';
 
 
-const Events = async (request: Request): Promise<Response> => {
-    const headers = { 
+const Events = async (request: Request, env: Env): Promise<Response> => {
+    const headers = {
         "Access-Control-Allow-Origin": "*",
         "Content-type": "application/json",
     };
@@ -11,8 +12,8 @@ const Events = async (request: Request): Promise<Response> => {
     console.log("Received event: ", event);
 
     const storage = new Storage();
-    await storage.init();
-    
+    await storage.init(env);
+
     try {
         await storage.saveEvent(event)
         return new Response("", { headers })

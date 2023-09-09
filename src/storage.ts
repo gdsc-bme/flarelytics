@@ -1,10 +1,5 @@
 import * as Realm from 'realm-web';
-
-declare global {
-    const REALM_APPID: string;
-    const REALM_API_TOKEN: string;
-    const DB_NAME: string;
-}
+import Env from './env';
 
 type Document = globalThis.Realm.Services.MongoDB.Document;
 type RawEventCollection = globalThis.Realm.Services.MongoDB.MongoDBCollection<Event>;
@@ -19,12 +14,12 @@ export interface Event extends Document {
 
 export default class Storage {
     events: RawEventCollection;
-    
-    async init(): Promise<void> {
-        const app = new Realm.App(REALM_APPID);
-        const credentials = Realm.Credentials.apiKey(REALM_API_TOKEN);
+
+    async init(env: Env): Promise<void> {
+        const app = new Realm.App(env.REALM_APPID);
+        const credentials = Realm.Credentials.apiKey(env.REALM_API_TOKEN);
         const user = await app.logIn(credentials);
-        this.events = user.mongoClient('mongodb-atlas').db(DB_NAME).collection<Event>('events');
+        this.events = user.mongoClient('mongodb-atlas').db(env.DB_NAME).collection<Event>('events');
     }
 
     async saveEvent(event: Event): Promise<void> {
@@ -43,9 +38,9 @@ export default class Storage {
                 $sort: {timestamp: 1},
             },
             {
-                $group: { 
-                    _id: { tracking_id: "$tracking_id"}, 
-                    events: { $push: "$$ROOT" }, 
+                $group: {
+                    _id: { tracking_id: "$tracking_id"},
+                    events: { $push: "$$ROOT" },
                 }
             },
         ]

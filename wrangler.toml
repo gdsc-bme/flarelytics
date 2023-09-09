@@ -1,19 +1,12 @@
 name = "flarelytics-dev"
-workers_dev = true
-type = "javascript"
+main = "./src/index.ts"
 compatibility_date = "2022-02-14"
 
 [vars]
 DB_NAME = "dev"
 
-[build]
-command = "npm install && npm run build"
-[build.upload]
-format = "service-worker"
-
 [env.production]
 name = "flarelytics"
-workers_dev = false
 
 [env.production.vars]
 DB_NAME = "production"

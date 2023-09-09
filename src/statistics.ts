@@ -1,5 +1,6 @@
 
 import Storage, {Event} from './storage'
+import Env from './env'
 
 const calculateTimeOnPage = (events: [Event]): number => {
     let time_on_page = 0;
@@ -19,13 +20,13 @@ const calculateTimeOnPage = (events: [Event]): number => {
 };
 
 
-const Statistics = async (): Promise<Response> => {
+const Statistics = async (_: Request, env: Env): Promise<Response> => {
     const headers = {
         "Content-type": "application/json",
     };
 
     const storage = new Storage();
-    await storage.init();
+    await storage.init(env);
 
     const events_by_tracking_id = await storage.getEventsByTrackingId();
 
