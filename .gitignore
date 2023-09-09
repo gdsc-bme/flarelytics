@@ -3,3 +3,5 @@ node_modules
 transpiled
 /.idea/
 .DS_Store
+*-lock.*
+*.lock
