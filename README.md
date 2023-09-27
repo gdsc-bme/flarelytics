@@ -9,7 +9,7 @@ Web analytics project to track the time visitors spend on the website.
 
 > At this moment, the project is under active development and is not ready for production use.
 
-Built on top of Cloudflare Workers and MongoDB (undergoing transition to PlanetScale/MySQL). Currently, supports tracking for a *single domain* only.
+Built on top of Cloudflare Workers and PlanetScale. Currently, supports tracking for a *single domain* only.
 
 Mainteined by [Google Developer Student Club at Budapest University of Technology and Economics](https://gdsc.community.dev/budapest-university-of-technology-and-economics/).
 
@@ -52,24 +52,70 @@ We welcome contributions from the community to help improve and expand this proj
 
 In this section, you will find instructions on how to set up the development environment.
 
-### Prerequisites
+### 1. Prerequisites
 
 Do the steps below to set up the development environment:
 
+0. Follow instructions in [How to contribute](#how-to-contribute) section.
 1. Create free [Cloudflare account](https://dash.cloudflare.com/sign-up/workers-and-pages).
 2. Create free [PlanetScale account](https://planetscale.com).
-3. Install Node.js, [nvm](https://github.com/nvm-sh/nvm) (*optional*; for Linux, MacOS and Windows WSL), npm or pnpm.
-4. Run `npm install` (or equivalent) to install necessary packages.
+3. Install Node.js **v18** (at least), [pnpm](https://pnpm.io/) (faster equivalent of npm), and (*optional*) [nvm](https://github.com/nvm-sh/nvm) (if you are using Linux, MacOS or Windows WSL).
+4. Run `pnpm install` (or equivalent) to install necessary packages.
+5. Install PlanetScale [pscale CLI](https://planetscale.com/docs/concepts/planetscale-environment-setup) tool and log in to your account.
+6. In PlanetScale create a database called `flarelytics` with two branches `main` and `dev`.
+Consider `main` to be a production. **Always develop on `dev` branch!**
+7. Create a Cloudflare Worker function in "Workers & Pages" menu called `flarelytics-dev`.
+8. Create `.dev.vars` file for development secrets. For more info, read [Environment variables](#environment-variables) section.
+9. In PlanetScale, you can create a new connection string to the `dev` branch of the database. Follow tutorial [here](https://planetscale.com/docs/concepts/connection-strings#creating-a-password). Copy `DATABASE_HOST`, `DATABASE_USER`, `DATABASE_PASSWORD` to `.dev.vars` file. This will be used for local development. Keep the credentials safe!
+10. (*optional*) If you plan to deploy to Cloudflare Workers to test your changes, make sure to add `DATABASE_HOST`, `DATABASE_USER`, `DATABASE_PASSWORD` to the **secret** environment variables of the `flarelytics-dev` Worker in the web dashboard. The tutorial can be found [here](https://developers.cloudflare.com/workers/configuration/secrets/).
 
-### Environment variables
+### 2. Environment variables
 
-For local development, secrets are stored in `.dev.vars` file and non-sensitive variables can be defined in `wrangler.toml` file.
+For local development, secrets are stored in `.dev.vars` file and non-sensitive variables can be defined in `wrangler.toml` file. The format of `.dev.vars` file is as follows:
 
-For production, secrets need to be defined in Cloudflare Workers. Either with UI, or using `wrangler` tool.
+```
+DATABASE_HOST=<your-value-here>
+DATABASE_USERNAME=<your-value-here>
+DATABASE_PASSWORD=<your-value-here>
+```
 
-### Running locally
+For production and dev, secrets need to be defined in Cloudflare Workers. Either with UI, or using `wrangler` tool.
 
-To run the project locally, run `npm run dev` (or equivalent) command. It will start a local Workers server.
+### 3. Setting up the database
+
+If you completed the steps from [Prerequisites](#prerequisites) section, you should have a database called `flarelytics` with two branches `main` and `dev`. The `dev` branch is used for development and `main` branch is used for production.
+
+To setup a **dev** database, run `pnpm run setup-test-db` command. It will create necessary tables and test data in the `dev` branch of the `flarelytics` database.
+
+### 4. Running locally
+
+To run the project locally, run `pnpm run dev` command. It will start a local Workers server and use environment variables from `wrangler.toml` file and secrets from `.dev.vars` file.
+
+You will see the following output:
+
+```bash
+> flarelytics@0.2.0 dev /Users/vmois/Projects/flarelytics
+> wrangler dev src/index.ts
+Using vars defined in .dev.vars
+Your worker has access to the following bindings:
+- Vars:
+  - DATABASE_HOST: "(hidden)"
+  - DATABASE_USERNAME: "(hidden)"
+  - DATABASE_PASSWORD: "(hidden)"
+⎔ Starting local server...
+[mf:inf] Ready on http://0.0.0.0:8787
+[mf:inf] - http://127.0.0.1:8787
+[mf:inf] - http://192.168.1.97:8787
+```
+
+If you navigate to `http://localhost:8787/stats` you should see the following output:
+
+![Test stats](./images/stats-test-setup.png)
+
+
+### 5. Deploying to Cloudflare Workers
+
+Currently, we assume that you want to deploy Flarelytics to a dev environment and it is not intended for production use case (yet). To do that, run `npm run deploy-dev` command. It will deploy the project to the `flarelytics-dev` Worker. You can find URL to access the Worker in the web dashboard. **Be careful as now your project is live and can be accessed by others!**
 
 ## Where the project name comes from?
 

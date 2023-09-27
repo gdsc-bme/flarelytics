@@ -13,8 +13,7 @@
     "esModuleInterop": true,
     "types": [
       "@cloudflare/workers-types",
-      "@types/jest",
-      "@types/service-worker-mock"
+      "@types/jest"
     ]
   },
   "include": ["src"],

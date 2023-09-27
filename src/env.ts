@@ -1,5 +1,6 @@
 export default interface Env {
 	DB_NAME: string;
-	REALM_APPID: string;
-	REALM_API_TOKEN: string;
+	DATABASE_HOST: string;
+	DATABASE_USERNAME: string;
+	DATABASE_PASSWORD: string;
 }
