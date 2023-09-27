@@ -1,11 +1,15 @@
 {
   "name": "flarelytics",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Web analytics platform based on Cloudflare Workers",
   "main": "dist/worker.js",
   "scripts": {
+    "delete-test-db": "pscale shell flarelytics dev < ./scripts/delete_tables.sql",
+    "create-test-db": "pscale shell flarelytics dev < ./scripts/create_tables.sql",
+		"insert-test-data": "pscale shell flarelytics dev < ./scripts/insert_test_data.sql",
+		"setup-test-db": "npm run delete-test-db && npm run create-test-db && npm run insert-test-data",
     "dev": "wrangler dev src/index.ts",
-    "build": "webpack",
+		"deploy-dev": "npx wrangler deploy --env dev",
     "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "test": "jest --config jestconfig.json --verbose"
@@ -32,7 +36,7 @@
     "wrangler": "^3.7.0"
   },
   "dependencies": {
-    "itty-router": "^4.0.0",
-    "realm-web": "^1.7.0"
+    "@planetscale/database": "^1.11.0",
+    "itty-router": "^4.0.0"
   }
 }

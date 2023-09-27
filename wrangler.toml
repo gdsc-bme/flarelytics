@@ -1,8 +1,10 @@
-name = "flarelytics-dev"
 main = "./src/index.ts"
 compatibility_date = "2022-02-14"
 
-[vars]
+[env.dev]
+name = "flarelytics-dev"
+
+[env.dev.vars]
 DB_NAME = "dev"
 
 [env.production]
@@ -12,5 +14,6 @@ name = "flarelytics"
 DB_NAME = "production"
 
 # [secrets]
-# REALM_APPID
-# REALM_API_TOKEN
+# DATABASE_HOST
+# DATABASE_USERNAME
+# DATABASE_PASSWORD
