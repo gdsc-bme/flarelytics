@@ -32,7 +32,7 @@ export default class Storage {
 				[event.tracking_id, event.domain, event.page, event.state, new Date()]);
     }
 
-    async getAvgViewTimePerPage(): Promise<AvgViewTimePerPage> {
+    async getAvgViewTimePerPage(minutes: number): Promise<AvgViewTimePerPage> {
 			const query = `
 			SELECT page, AVG(TIMESTAMPDIFF(SECOND, prev_timestamp, \`timestamp\`)) as avg_time
 				FROM (
@@ -44,10 +44,11 @@ export default class Storage {
 							state,
 							LAG(state) OVER (PARTITION BY tracking_id, page ORDER BY \`timestamp\`) AS prev_state
 					FROM events
+					WHERE \`timestamp\` >= DATE_SUB(NOW(), INTERVAL ? MINUTE)
 			) AS LaggedEvents
 			WHERE prev_state = 'visible' AND state = 'hidden' GROUP BY page;`;
 
-			const results = await this.connection.execute(query, { as: 'object' });
+			const results = await this.connection.execute(query, [minutes], { as: 'object' });
 			const rows = results.rows;
 
 			const avgViewTimePerPage: AvgViewTimePerPage = {};
