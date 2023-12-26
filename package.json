@@ -1,42 +1,42 @@
 {
-  "name": "flarelytics",
-  "version": "0.2.0",
-  "description": "Web analytics platform based on Cloudflare Workers",
-  "main": "dist/worker.js",
-  "scripts": {
-    "delete-test-db": "pscale shell flarelytics dev < ./scripts/delete_tables.sql",
-    "create-test-db": "pscale shell flarelytics dev < ./scripts/create_tables.sql",
+	"name": "flarelytics",
+	"version": "0.2.0",
+	"description": "Web analytics platform based on Cloudflare Workers",
+	"main": "dist/worker.js",
+	"scripts": {
+		"delete-test-db": "pscale shell flarelytics dev < ./scripts/delete_tables.sql",
+		"create-test-db": "pscale shell flarelytics dev < ./scripts/create_tables.sql",
 		"insert-test-data": "pscale shell flarelytics dev < ./scripts/insert_test_data.sql",
 		"setup-test-db": "npm run delete-test-db && npm run create-test-db && npm run insert-test-data",
-    "dev": "wrangler dev src/index.ts",
+		"dev": "wrangler dev src/index.ts",
 		"deploy-dev": "npx wrangler deploy --env dev",
-    "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
-    "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
-    "test": "jest --config jestconfig.json --verbose"
-  },
-  "author": "Vladyslav Moisieienkov (VMois)",
-  "license": "GPL-3.0",
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "typescript",
-      "prettier"
-    ]
-  },
-  "devDependencies": {
-    "@cloudflare/workers-types": "^3.0.0",
-    "@types/jest": "^26.0.23",
-    "@typescript-eslint/eslint-plugin": "^4.16.1",
-    "@typescript-eslint/parser": "^4.16.1",
-    "eslint": "^7.0.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-config-typescript": "^3.0.0",
-    "jest": "^27.0.1",
-    "prettier": "^3.0.3",
-    "wrangler": "^3.7.0"
-  },
-  "dependencies": {
-    "@planetscale/database": "^1.11.0",
-    "itty-router": "^4.0.0"
-  }
+		"format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
+		"lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
+		"test": "jest --config jestconfig.json --verbose"
+	},
+	"author": "Vladyslav Moisieienkov (VMois)",
+	"license": "GPL-3.0",
+	"eslintConfig": {
+		"root": true,
+		"extends": [
+			"typescript",
+			"prettier"
+		]
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^3.0.0",
+		"@types/jest": "^26.0.23",
+		"@typescript-eslint/eslint-plugin": "^4.16.1",
+		"@typescript-eslint/parser": "^4.16.1",
+		"eslint": "^7.0.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-config-typescript": "^3.0.0",
+		"jest": "^27.0.1",
+		"prettier": "^3.0.3",
+		"wrangler": "^3.7.0"
+	},
+	"dependencies": {
+		"@planetscale/database": "^1.11.0",
+		"itty-router": "^4.0.0"
+	}
 }
