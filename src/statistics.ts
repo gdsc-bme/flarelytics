@@ -1,12 +1,11 @@
-import Storage from './storage'
-import Env from './env'
-
+import Storage from './storage';
+import Env from './env';
 
 function convertDurationToMinutes(duration: string | null): number {
 	const day = 24 * 60;
 	const month = 30 * day;
 
-  switch (duration) {
+	switch (duration) {
 		case '7d':
 			return 7 * day;
 		case '30d':
@@ -19,24 +18,23 @@ function convertDurationToMinutes(duration: string | null): number {
 			return 12 * month;
 		default:
 			return 7 * day;
-  }
+	}
 }
-
 
 const Statistics = async (req: Request, env: Env): Promise<Response> => {
-    const headers = {
-        'Content-type': 'application/json',
-    };
+	const headers = {
+		'Content-type': 'application/json',
+	};
 
-    const storage = new Storage();
-    await storage.init(env);
+	const storage = new Storage();
+	await storage.init(env);
 
-		const url = new URL(req.url);
-		const last = url.searchParams.get('last');
-		const minutes = convertDurationToMinutes(last);
+	const url = new URL(req.url);
+	const last = url.searchParams.get('last');
+	const minutes = convertDurationToMinutes(last);
 
-    const avgViewTime = await storage.getAvgViewTimePerPage(minutes);
-    return new Response(JSON.stringify(avgViewTime), { headers });
-}
+	const avgViewTime = await storage.getAvgViewTimePerPage(minutes);
+	return new Response(JSON.stringify(avgViewTime), { headers });
+};
 
 export default Statistics;
